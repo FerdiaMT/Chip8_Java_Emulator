@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -55,7 +56,8 @@ public class Memory {
 	}
 
 	public void loadROM() {
-		File file = new File("C:\\Users\\ferdi\\eclipse-workspace\\chip8\\Chip8_Emulator_Java\\src\\ferdiaMT\\IBM Logo.ch8");
+		File file = new File("./ROM/IBM.ch8");
+				
 		try {
 			gameBytes = Files.readAllBytes(file.toPath());
 		} catch (IOException e) {

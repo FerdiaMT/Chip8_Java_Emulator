@@ -16,7 +16,7 @@ public class DelayTimer implements Runnable {
 		
 		long lastTime = System.nanoTime();
 		long currentTime = lastTime;
-		double nsPerSecond = 1000000000/10;
+		double nsPerSecond = 1000000000/60;
 		double threshold = 0;
 		double debugTime = System.currentTimeMillis();
 		
