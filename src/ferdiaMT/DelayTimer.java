@@ -24,7 +24,6 @@ public class DelayTimer implements Runnable {
 			currentTime = System.nanoTime();
 			threshold = (currentTime-lastTime)/nsPerSecond;
 			
-
 			if(threshold >=1) {
 				lastTime = currentTime;
 				threshold--;

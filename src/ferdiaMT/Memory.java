@@ -7,10 +7,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Random;
 
 public class Memory {
 
-
+	Stack stack = new Stack(16);
 	private byte[] gameBytes;
 	private byte[] ram;
 	private int[] fontFace = 	{
@@ -35,7 +36,7 @@ public class Memory {
 	private int PC = 0x200; // programCounter , points at current instruction
 	private int I = 0; // index, points at current memory slot
 	private int[] reg = new int[16];
-	
+	Random random = new Random();
 	
 	public int code;
 	Chip8 chip8;
@@ -119,18 +120,30 @@ public class Memory {
 		switch(firstChunk) {
 		
 			case 0x0:
-				if(nnn == 0x0E0) {
+				if(nnn == 0x00E0) {
 					display.clear();
 				}
+				if(nnn == 0x00EE) {
+					PC = stack.pop();
+				}
+				
 				break;
 			case 0x1:
 				PC = nnn;
 				break;
 			case 0x2:
+				stack.push(PC);
+				PC = nnn;
 				break;
 			case 0x3:
+				if(reg[x]==nn) {
+					PC+=2;
+				}
 				break;
 			case 0x4:
+				if(reg[x]!=nn) {
+					PC+=2;
+				}
 				break;
 			case 0x5:
 				break;
@@ -141,6 +154,36 @@ public class Memory {
 				reg[x]+=nn;
 				break;
 			case 0x8:
+				if(n==0) {
+					reg[x] = reg[y];
+				}
+				if(n==1) {
+					reg[x] = (reg[x]|reg[y]);
+				}
+				if(n==2) {
+					reg[x] = (reg[x]&reg[y]);
+				}
+				if(n==3) {
+					reg[x] = (reg[x]^reg[y]);
+				}
+				if(n==4) {
+					reg[x] =(reg[x]+reg[y]);
+				}
+				if(n==5) {
+					reg[x] = reg[x] - reg[y];
+				}
+				if(n==6) {
+					reg[x] = reg[y]>>1;
+				}
+				
+				if(n==7) {
+					reg[x] = reg[y] - reg[x];
+				}
+				
+				if(n==0xE) {
+					reg[x] = reg[y]<<1;
+				}
+				
 				break;
 			case 0x9:
 				break;
@@ -148,14 +191,16 @@ public class Memory {
 				I = nnn;
 				break;
 			case 0xb:
+				PC = nnn+reg[0];
 				break;
 			case 0xc:
+				reg[x] = random.nextInt(0XFF) & nn;
 				break;
 			case 0xd:
 				draw(reg[x] , reg[y] , n);
 				
 				break;
-			case 0xE:
+			case 0xE: //EX9E is where im leaving it for tonight
 				break;
 			case 0xF:
 				break;
