@@ -32,6 +32,14 @@ public class Display extends Canvas {
 		bs.show();
 	}
 	
+	public void togglePixel(int index) {
+		if(pixels[index]==(byte)0xFF) {
+			pixels[index]=0;
+		}else {
+			pixels[index]=(byte)0xFF;
+		}
+	}
+	
 
 
 	public void clear() {
@@ -82,12 +90,16 @@ public class Display extends Canvas {
 			return;
 		}
 		
-		pixels[index] = (byte) 0xF0;
+		//pixels[index] = (byte) 0xF0;
 		
 		Graphics g = bs.getDrawGraphics();
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 		g.dispose();
 		
 		bs.show();
+	}
+
+	public boolean getPixel(int index) {
+		return (pixels[index]==(byte)0xFF);
 	}
 }
